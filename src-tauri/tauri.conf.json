@@ -29,17 +29,22 @@
         "exists": true
       },
       "window": {
+        "all": false,
         "close": true,
+        "hide": true,
+        "show": true,
         "maximize": true,
-        "unmaximize": true,
         "minimize": true,
+        "unmaximize": true,
         "unminimize": true,
+        "setResizable": true,
         "setSize": true,
         "setMinSize": true,
         "setMaxSize": true,
         "setFullscreen": true,
         "setCursorVisible": true,
-        "setCursorIcon": true
+        "setCursorIcon": true,
+        "startDragging": true
       }
     },
     "bundle": {

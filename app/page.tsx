@@ -1,4 +1,4 @@
-import MainView from 'wirt@/components/view/MainView';
+import MainView from 'wirt@/components/main/MainView';
 
 export default function Home() {
   return <MainView />;

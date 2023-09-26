@@ -1,5 +1,5 @@
+import 'wirt@/public/styles.css';
 import Frame from 'wirt@/components/window/Frame';
-import 'wirt@/styles/Root.css';
 
 export default function RootLayout({
   children,
