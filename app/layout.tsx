@@ -8,7 +8,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko'>
-      <body>
+      <body style={{ overflow: 'hidden' }}>
         <Frame>{children}</Frame>
       </body>
     </html>

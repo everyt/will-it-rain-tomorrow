@@ -1,22 +1,45 @@
 'use client';
 
-import { appWindow } from '@tauri-apps/api/window';
-import { useState } from 'react';
 import { Icon } from '@iconify-icon/react';
-import { motion } from 'framer-motion';
+import { appWindow } from '@tauri-apps/api/window';
+import { AnimationControls, motion, useAnimation } from 'framer-motion';
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function TitleBar() {
   const [isMaximized, setIsMaximized] = useState(false);
+
   const [onHoverMinimize, setOnHoverMinimize] = useState(false);
   const [onHoverMaximize, setOnHoverMaximize] = useState(false);
   const [onHoverClose, setOnHoverClose] = useState(false);
 
-  const handleOnHover = (boolean: boolean) => {
-    if (!boolean) {
+  const controlMinimize = useAnimation();
+  const controlMaximize = useAnimation();
+  const controlClose = useAnimation();
+
+  const pathname = usePathname();
+
+  const handleOnHover = (isOnHover: boolean) => {
+    if (!isOnHover) {
       setOnHoverMinimize(false);
       setOnHoverMaximize(false);
-      setOnHoverClose(false); // 이벤트 감지를 못 할때가 있음, 초기화. motion도 그래서 못씀.
+      setOnHoverClose(false);
+      controlMinimize.start({ opacity: 0.3 });
+      controlMaximize.start({ opacity: 0.3 });
+      controlClose.start({ opacity: 0.3 });
     }
+  };
+  const handleOnHoverButton = (
+    controls: AnimationControls,
+    setOnHover: Function,
+    isOnHover: boolean,
+  ) => {
+    if (isOnHover) {
+      controls.start({ opacity: 1 });
+    } else {
+      controls.start({ opacity: 0.3 });
+    }
+    setOnHover(isOnHover);
   };
   const minimize = async () => {
     await appWindow.setResizable(true);
@@ -36,43 +59,39 @@ export default function TitleBar() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      id='titlebar'
+    <div
       data-tauri-drag-region
-      className={`${
-        isMaximized && 'absolute'
-      } w-screen h-[30px] bg-white flex justify-end items-center p-2 border-b-[1px] border-stone-500`}
+      className='absolute left-0 top-0 z-50 flex h-[30px] w-screen items-center justify-end p-2'
       onMouseOver={() => handleOnHover(true)}
       onMouseOut={() => handleOnHover(false)}
     >
       {[
-        [minimize, 'minimize', onHoverMinimize, setOnHoverMinimize],
-        [maximize, 'fullscreen', onHoverMaximize, setOnHoverMaximize],
-        [close, 'close', onHoverClose, setOnHoverClose],
-      ].map(([onClick, icon, onHover, setOnHover], index) => (
-        <Icon
+        [controlMinimize, minimize, 'minimize', onHoverMinimize, setOnHoverMinimize],
+        [controlMaximize, maximize, 'fullscreen', onHoverMaximize, setOnHoverMaximize],
+        [controlClose, close, 'close', onHoverClose, setOnHoverClose],
+      ].map(([controls, onClick, icon, onHover, setOnHover], index) => (
+        <motion.div
           key={index}
-          className='cursor-pointer ml-[1px]'
-          icon={`mingcute-${index === 1 && isMaximized ? 'restore' : icon}-${
-            onHover ? 'fill' : 'line'
-          }`}
-          onClick={onClick as () => void}
-          onMouseEnter={
-            typeof setOnHover === 'function'
-              ? () => setOnHover(true)
-              : undefined
-          }
-          onMouseLeave={
-            typeof setOnHover === 'function'
-              ? () => setOnHover(false)
-              : undefined
-          }
-          style={{ fontSize: '24px' }}
-        />
+          className='ml-2 h-[24px] w-[24px] cursor-pointer'
+          initial={{ opacity: 0.3 }}
+          animate={controls as AnimationControls}
+        >
+          <Icon
+            className={pathname === '/dialog' ? 'text-white' : 'text-black'}
+            icon={`mingcute-${icon == 'fullscreen' && isMaximized ? 'restore' : icon}-${
+              onHover ? 'fill' : 'line'
+            }`}
+            onClick={onClick as () => void}
+            onMouseEnter={() =>
+              handleOnHoverButton(controls as AnimationControls, setOnHover as Function, true)
+            }
+            onMouseLeave={() =>
+              handleOnHoverButton(controls as AnimationControls, setOnHover as Function, false)
+            }
+            style={{ fontSize: '24px' }}
+          />
+        </motion.div>
       ))}
-    </motion.div>
+    </div>
   );
 }

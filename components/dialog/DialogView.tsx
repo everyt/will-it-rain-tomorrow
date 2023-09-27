@@ -35,7 +35,7 @@ export default function DialogView({ json }: { json: Object }) {
     if (isMount.current) {
       const isNext = () => {
         if (flow === 'next') {
-          setIndex((prev) => prev + 1);
+          // setIndex((prev) => prev + 1);
           setName(names[index]);
           setDialog(dialogues[index]);
         }
