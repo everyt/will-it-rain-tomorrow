@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+
 import DialogBox from 'wirt@/components/dialog/DialogBox';
 
 export default function DialogView({ json }: { json: Object }) {
@@ -35,7 +36,7 @@ export default function DialogView({ json }: { json: Object }) {
     if (isMount.current) {
       const isNext = () => {
         if (flow === 'next') {
-          // setIndex((prev) => prev + 1);
+          setIndex((prev) => prev + 1);
           setName(names[index]);
           setDialog(dialogues[index]);
         }
@@ -47,11 +48,7 @@ export default function DialogView({ json }: { json: Object }) {
   }, [flow]);
 
   return (
-    <DialogBox
-      flow={flow}
-      setFlow={setFlow}
-      name={name}
-    >
+    <DialogBox flow={flow} setFlow={setFlow} name={name}>
       {dialog}
     </DialogBox>
   );
