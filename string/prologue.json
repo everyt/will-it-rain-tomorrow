@@ -1,14 +1,7 @@
 [
-  {
-    "null": "하<p style='color: cyan;'>늘하</p>늘 새<p style='color: blue;'>파</p>란"
-  },
-  { "???": "2 Ut fringilla vestibulum leo, dictum ultricies nunc aliquet eu." },
-  { "4": "3 Cras quis odio ac diam pellentesque ullamcorper vitae vitae est." },
-  {
-    "mull": "5 Curabitur imperdiet lectus in eros sollicitudin pharetra et sit amet mi."
-  },
-  {
-    "null": "6 Fusce non enim eu elit viverra ullamcorper a iaculis purus. Nunc eu velit vel erat rutrum dapibus et ut purus. Donec molestie suscipit risus ut efficitur."
-  },
-  {}
+  {"null": "여름이었다."},
+  {"null": "그래, 여름이라는 계절은, 무척이나 따스하고도 온화하면서도. 무덥고 습한 생명이 고동치는 계절이다. 매미가 울고, 새들이 지저귀고, 개구리가 뛰어다니는."},
+  {"4": "3 Cras quis odio ac diam pellentesque ullamcorper vitae vitae est."},
+  {"mull": "5 Curabitur imperdiet lectus in eros sollicitudin pharetra et sit amet mi."},
+  {"null": "6 Fusce non enim eu elit viverra ullamcorper a iaculis purus. Nunc eu velit vel erat rutrum dapibus et ut purus. Donec molestie suscipit risus ut efficitur."}
 ]

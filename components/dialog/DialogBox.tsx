@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-
 import useInterval from 'wirt@/hooks/useInterval';
 
 type DialogBoxProps = {
@@ -12,7 +11,6 @@ type DialogBoxProps = {
   image?: string;
   title?: string;
 };
-
 type letters = {
   letter: string;
   type: string;
@@ -23,100 +21,110 @@ type lettersMap = {
   letter: number;
 }
 
-const skipDictionary = [' ', '.', ',', '!', '?', '"', "'", '`', '~'];
-// is used in typing function for natural typing animation
-
 export default function DialogBox({ flow, setFlow, children, name, image, title }: DialogBoxProps) {
-  const [delay, setDelay] = useState(100);              // typing delay state
+  const [delay, setDelay] = useState(100);
 
-  const letters = useRef<letters[]>([]);              // letters state
-  const lettersMap = useRef<lettersMap[]>([]);
-  const [lettersMapState, setLettersMapState] = useState<lettersMap[]>([]); // lettersMap state
-  const [typingCount, setTypingCount] = useState<number>(0); // typingCount state
-
-// Flow 관리자 ────────────────────────────────────────────┐
-  useEffect(() => {                                     //│
-    if ( flow === 'next' ) {                            //│
-      setFlow('start');                                 //│
-    }                                                   //│
-    if ( flow === 'end' ) {                             //│
-      setFlow('next');                                  //│
-    }                                                   //│
-  }, [flow]);                                           //│
-  useInterval(                                          //│
-    () => {                                             //│
-      console.log(flow);                                //│
-      setDelay(flow === 'skip' ? 0 : 100);              //│
-      typing();                                         //│
-    }, // ────────────────────────────────────────────────┤
-    flow === 'start'  ? 0      // start: 대화가 시작함      │
-  : flow === 'typing' ? delay  // typing: 타이핑           │
-  : flow === 'skip'   ? 0      // skip: 스킵함             │
-  : null,                      // end: 종료함              │
-  ); //                                                   │
-// ───────────────────────────────────────────────────────┘
-
-  const typing = () => {
-    const initializeDialog = () => {
-      if (children) {
-        let tempLetters = children.split('');
-        let letter = '';
-        for (let i = 0; i < tempLetters.length; i++) {
-          letter = tempLetters[i];
-          let type = 'text';
-          if (tempLetters[i] === '<') {
-            i++;
-            type = tempLetters[i] === '/' ? 'closingTag' : 'startingTag';
-            while (tempLetters[i] !== '>') {
-              letter += tempLetters[i];
-              i++;
-            }
-            letter += tempLetters[i];
-          }
-          letters.current.push({letter, type});
-        }
-        for (let i= 0; i < letters.current.length; i++) {
-          if (letters.current[i].type === 'text') {
-            lettersMap.current.push({prefix: null, suffix: null, letter: i})
-          } else if (letters.current[i].type === 'startingTag') {
-            let j = 0;
-            let k = i;
-            while (letters.current[i].type !== 'closingTag') {
-              i++;
-              j++;
-            }
-            const tempLettersMap: lettersMap[] = [];
-            for (j; j > 1; j--) {
-              tempLettersMap.push({prefix: k, suffix: i, letter: j + k - 1})
-            }
-            lettersMap.current.push(...tempLettersMap.reverse());
-          }
-        }
-        setLettersMapState(lettersMap.current);
-      } else {
-        console.log('DialogBox: children is null.');
-      }
-    }
-    if (flow === 'start') {
-      initializeDialog();
-      setFlow('typing');
-    } else if (flow === 'typing' || flow === 'skip') {
-      if (typingCount <= lettersMapState.length) {
-        if (skipDictionary.includes(letters.current[lettersMapState[typingCount].letter].letter)) setDelay(0);
-        setTypingCount(prev => prev + 1);
-      }
-    }
-  };
-
-  useEffect(() => { // 키보드 입력 이벤트 처리
-    const handleKeyDown = (ev: KeyboardEvent) => {
-      if (ev.key === 'Enter' || ev.key === ' ') {
-        flow === 'typing' ? setFlow('skip') : setFlow('end')
-      }
-    }
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [])
+// 대화 분해용 React 변수 ㅡㅡ────────────────────────────────────────────────────┐┌────┐
+  const letters = useRef<letters[]>([]);                        //EveryHongCha ││ ┌──┘
+  const lettersMap = useRef<lettersMap[]>([]);                               //││ └──┐
+  const [lettersMapState, setLettersMapState] = useState<lettersMap[]>([]);  //││ ┌──┘
+  const [typingCount, setTypingCount] = useState<number>(0);                 //││ └──┐
+// Flow 관리자 ─────────────────────────────────────────────────────────────────┤└────┘
+  useEffect(() => {                                             //EveryHongCha │┌─┐┌─┐
+    if ( flow === 'next' ) {                                                 //││ ││ │
+      setFlow('start');                                                      //││ ││ │
+    }                                                                        //││ ││ │
+    if (flow === 'end') {                                                    //││ └┘ │
+      setFlow('next');                                                       //│└────┘
+      setTypingCount(0);                                                     //│┌────┐
+      letters.current = [];                                                  //││ ┌──┘
+      lettersMap.current = [];                                               //││ └──┐
+      setLettersMapState([]);                                                //││ ┌──┘
+    }                                                                        //││ └──┐
+  }, [flow]);                                                                //│└────┘
+  useInterval(                                                               //│┌────┐
+    () => {                                                                  //││ ┌┐ │
+      console.log(flow);                                                     //││ └┘┌┘
+      setDelay(flow === 'skip' ? 0 : 100);                                   //││ ┌┐└┐
+      typing();                                                 //EveryHongCha ││ ││ │
+    }, // ─────────────────────────────────────────────────────────────────────┤└─┘└─┘
+    flow === 'start'    ? 0                           // start: 대화가 시작함    │┌─┐┌─┐
+  : flow === 'typing'   ? delay                       // typing: 타이핑         ││ ││ │
+  : flow === 'skip'     ? 0                           // skip: 스킵함           ││ └┘ │
+  : flow === 'delayEnd' ? 2000                        // delayEnd: 종료를 딜레이 │└──┐ │
+  : null,                                             // end: 종료함            │┌──┘ │
+  ); //                                                                        │└────┘
+// 타이핑 시스템 ────────────────────────────────────────────────────────────────┤┌─┐┌─┐
+  const typing = () => {                                        //EveryHongCha ││ ││ │
+    const initializeDialog = () => {                                         //││ └┘ │
+      if (children) {                                                        //││ ┌┐ │
+        let tempLetters = children.split('');                                //││ ││ │
+        let letter = '';                                                     //│└─┘└─┘
+        for (let i = 0; i < tempLetters.length; i++) {                       //│┌────┐
+          letter = tempLetters[i];                                           //││ ┌┐ │
+          let type = 'text';                                                 //││ ││ │
+          if (tempLetters[i] === '<') {                                      //││ ││ │
+            i++;                                                             //││ └┘ │
+            type = tempLetters[i] === '/' ? 'closingTag' : 'startingTag';    //│└────┘
+            while (tempLetters[i] !== '>') {                                 //│┌────┐
+              letter += tempLetters[i];                                      //││ ┌┐ │
+              i++;                                                           //││ ││ │
+            }                                                                //││ ││ │
+            letter += tempLetters[i];                                        //││ ││ │
+          }                                                                  //│└─┘└─┘
+          if (letter === ' ') letter = '&nbsp;';                             //│┌────┐
+          letters.current.push({letter, type});                              //││ ┌──┘
+        }                                                                    //││ │┌─┐
+        for (let i= 0; i < letters.current.length; i++) {                    //││ ││ │
+          if (letters.current[i].type === 'text') {                          //││ └┘ │
+            lettersMap.current.push({prefix: null, suffix: null, letter: i}) //│└────┘
+          } else if (letters.current[i].type === 'startingTag') {            //│┌────┐
+            let j = 0;                                                       //││ ┌──┘
+            let k = i;                                                       //││ │
+            while (letters.current[i].type !== 'closingTag') {               //││ │
+              i++;                                                           //││ └──┐
+              j++;                                                           //│└────┘
+            }                                                                //│┌─┐┌─┐
+            const tempLettersMap: lettersMap[] = [];                         //││ ││ │
+            for (j; j > 1; j--) {                                            //││ └┘ │
+              tempLettersMap.push({prefix: k, suffix: i, letter: j + k - 1}) //││ ┌┐ │
+            }                                                                //││ ││ │
+            lettersMap.current.push(...tempLettersMap.reverse());            //│└─┘└─┘
+          }                                                                  //│┌────┐
+        }                                                                    //││ ┌┐ │
+        setLettersMapState(lettersMap.current);                              //││ └┘ │
+      } else {                                                               //││ ┌┐ │
+        console.log('DialogBox: children is null.');                         //││ ││ │
+      }                                                                      //│└─┘└─┘
+    }                                                                        //│
+    if (flow === 'start') {                                                  //│
+      initializeDialog();                                                    //│
+      setFlow('typing');                                                     //│
+    } else if (flow === 'typing' || flow === 'skip') {                       //│
+      if (typingCount <= lettersMapState.length) {                           //│
+        setTypingCount(prev => prev + 1);                                    //│
+      } else {                                                               //│
+        setFlow('delayEnd');                                                 //│
+      }                                                                      //│
+    } else if (flow === 'delayEnd') {                                        //│
+      setFlow('end');                                                        //│
+    }                                                                        //│
+  };                                                            //EveryHongCha │
+// 키보드 입력 이벤트 ㅡ──────────────────────────────────────────────────────────┤
+  useEffect(() => {                                             //EveryHongCha │
+    const handleKeyPress = (ev: KeyboardEvent) => {                          //│
+      ev.preventDefault();                                                   //│
+      ev.stopPropagation();                                                  //│
+      if(!ev.isComposing) {                                                  //│
+        if (ev.key === 'Enter' || ev.key === ' ') {                          //│
+          flow === 'typing' ? setFlow('skip') : setFlow('end')               //│
+        }                                                                    //│
+      }                                                                      //│
+    }                                                                        //│
+    document.addEventListener('keypress', handleKeyPress);                   //│
+    return () => document.removeEventListener('keypress', handleKeyPress);   //│
+  }, [children, flow])                                          //EveryHongCha │
+// ────────────────────────────────────────────────────────────────────────────┘
 
   return (
     <>
@@ -129,7 +137,7 @@ export default function DialogBox({ flow, setFlow, children, name, image, title 
       >
         {name !== 'null' && <div className='text-[3.5vh]'>{name}</div>}
         <div className='m-2'>
-          <div className='flex content-center text-[2.8vh]'>
+          <div className='flex content-center text-[2.8vh] flex-wrap w-[98%] m-4'>
             {lettersMapState.map((item, index) => (index < typingCount-1 && (
                 <div key={index}
                   dangerouslySetInnerHTML={{__html: `${
