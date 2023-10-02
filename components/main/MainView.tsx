@@ -1,13 +1,13 @@
-import MenuButton from './MenuButton';
+import MainButton from './MainButton';
 
 export default function MainView() {
   return (
     <div className='flex w-screen flex-col items-center'>
       <img src='/logo.png' alt='logo' />
-      <MenuButton href='/story'>시작하기</MenuButton>
-      <MenuButton href='/load'>불러오기</MenuButton>
-      <MenuButton href='/settings'>설정</MenuButton>
-      <MenuButton href='/exit'>나가기</MenuButton>
+      <MainButton href='/story'>시작하기</MainButton>
+      <MainButton href='/load'>불러오기</MainButton>
+      <MainButton href='/settings'>설정</MainButton>
+      <MainButton href='/exit'>나가기</MainButton>
     </div>
   );
 }

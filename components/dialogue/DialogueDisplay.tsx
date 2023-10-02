@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 import useInterval from 'wirt@/hooks/useInterval';
 
-type DialogBoxProps = {
+type DialogueDisplayProps = {
   flow: string;
   setFlow: Function;
   children: string;
   name?: string;
-  image?: string;
+  background?: string;
   title?: string;
 };
 type letters = {
@@ -21,7 +21,7 @@ type lettersMap = {
   letter: number;
 }
 
-export default function DialogBox({ flow, setFlow, children, name, image, title }: DialogBoxProps) {
+export default function DialogueDisplay({ flow, setFlow, children, name, background, title }: DialogueDisplayProps) {
   const [delay, setDelay] = useState(100);
 
 // 대화 분해용 React 변수 ㅡㅡ────────────────────────────────────────────────────┐┌────┐
@@ -94,65 +94,88 @@ export default function DialogBox({ flow, setFlow, children, name, image, title 
         }                                                                    //││ ┌┐ │
         setLettersMapState(lettersMap.current);                              //││ └┘ │
       } else {                                                               //││ ┌┐ │
-        console.log('DialogBox: children is null.');                         //││ ││ │
+        console.log('※ DialogBox: children is null. ※');     　　            //││ ││ │
       }                                                                      //│└─┘└─┘
-    }                                                                        //│
-    if (flow === 'start') {                                                  //│
-      initializeDialog();                                                    //│
-      setFlow('typing');                                                     //│
-    } else if (flow === 'typing' || flow === 'skip') {                       //│
-      if (typingCount <= lettersMapState.length) {                           //│
-        setTypingCount(prev => prev + 1);                                    //│
-      } else {                                                               //│
-        setFlow('delayEnd');                                                 //│
-      }                                                                      //│
-    } else if (flow === 'delayEnd') {                                        //│
-      setFlow('end');                                                        //│
-    }                                                                        //│
-  };                                                            //EveryHongCha │
-// 키보드 입력 이벤트 ㅡ──────────────────────────────────────────────────────────┤
-  useEffect(() => {                                             //EveryHongCha │
-    const handleKeyPress = (ev: KeyboardEvent) => {                          //│
-      ev.preventDefault();                                                   //│
-      ev.stopPropagation();                                                  //│
-      if(!ev.isComposing) {                                                  //│
-        if (ev.key === 'Enter' || ev.key === ' ') {                          //│
-          flow === 'typing' ? setFlow('skip') : setFlow('end')               //│
-        }                                                                    //│
-      }                                                                      //│
-    }                                                                        //│
-    document.addEventListener('keypress', handleKeyPress);                   //│
-    return () => document.removeEventListener('keypress', handleKeyPress);   //│
-  }, [children, flow])                                          //EveryHongCha │
-// ────────────────────────────────────────────────────────────────────────────┘
+    }                                                                        //│┌─┐
+    if (flow === 'start') {                                                  //││ │
+      initializeDialog();                                                    //││ │
+      setFlow('typing');                                                     //││ │
+    } else if (flow === 'typing' || flow === 'skip') {                       //││ │
+      if (typingCount <= lettersMapState.length) {                           //││ │
+        setTypingCount(prev => prev + 1);                                    //││ │
+      } else {                                                               //││ │
+        setFlow('delayEnd');                                                 //││ │
+      }                                                                      //││ │
+    } else if (flow === 'delayEnd') {                                        //││ │
+      setFlow('end');                                                        //││ │
+    }                                                                        //││ │
+  };                                                            //EveryHongCha ││ │
+// 키보드 입력 이벤트 ㅡ──────────────────────────────────────────────────────────┤│ │
+  useEffect(() => {                                             //EveryHongCha ││ │
+    const handleKeyPress = (ev: KeyboardEvent) => {                          //││ │
+      ev.preventDefault();                                                   //││ │
+      ev.stopPropagation();                                                  //││ │
+      if(!ev.isComposing) {                                                  //││ │
+        if (ev.key === 'Enter' || ev.key === ' ') {                          //││ │
+          flow === 'typing' ? setFlow('skip') : setFlow('end')               //││ │
+        }                                                                    //││ │
+      }                                                                      //││ │
+    }                                                                        //││ │
+    document.addEventListener('keypress', handleKeyPress);                   //││ │
+    return () => document.removeEventListener('keypress', handleKeyPress);   //││ │
+  }, [children, flow])                                          //EveryHongCha ││ │
+// ────────────────────────────────────────────────────────────────────────────┘└─┘
 
   return (
     <>
-      {image && <img src={image} className='absolute left-0 top-0 z-10 object-cover' />}
-      <div className='absolute left-0 top-0 z-20 flex h-1/6 w-full flex-col justify-end bg-black text-white'>
-        {title && <p className='m-5 text-[4vh]'>{title}</p>}</div>
+      {background !== 'null' &&
+        <img src={background}
+          className='object-cover
+          absolute left-0 top-0 z-10'
+        />
+      }
       <div
-        className='absolute bottom-[-20px] left-[-20px] z-20 m-5 h-1/3 w-full bg-black text-white'
+        className='h-1/6 w-full
+        flex flex-col justify-end
+        absolute left-0 top-0 z-20
+        bg-black text-white'
+      >
+        {title !== 'null' &&
+        <p
+          className='m-5 text-[4vh]'
+        >
+          {title}
+        </p>
+        }
+      </div>
+      <div
+        className='h-1/3 w-full m-5
+        absolute bottom-[-20px] left-[-20px] z-20
+        bg-black text-white'
         onClick={() => flow === 'typing' ? setFlow('skip') : setFlow('end')}
       >
-        {name !== 'null' && <div className='text-[3.5vh]'>{name}</div>}
+        {name !== 'null' && <div className='text-[3.5vh] m-4'>{name}</div>}
         <div className='m-2'>
-          <div className='flex content-center text-[2.8vh] flex-wrap w-[98%] m-4'>
+          <div
+            className='w-[98%] m-4
+            flex flex-wrap content-center
+            text-[2.8vh]'
+          >
             {lettersMapState.map((item, index) => (index < typingCount-1 && (
                 <div key={index}
-                  dangerouslySetInnerHTML={{__html: `${
-                      item.prefix !== null ? letters.current[item.prefix].letter : ''}${
-                      letters.current[item.letter].letter}${
-                      item.suffix !== null ? letters.current[item.suffix].letter : ''}`,}}
+                  dangerouslySetInnerHTML={{__html:
+                 `${item.prefix !== null ? letters.current[item.prefix].letter : ''}
+                  ${letters.current[item.letter].letter}
+                  ${item.suffix !== null ? letters.current[item.suffix].letter : ''}`,}}
               />
             )))}
             {lettersMapState.map((item, index) => (index === typingCount-1 && (
                 <div key={index}
                   className='animate-fadeIn'
-                  dangerouslySetInnerHTML={{__html: `${
-                      item.prefix !== null ? letters.current[item.prefix].letter : ''}${
-                      letters.current[item.letter].letter}${
-                      item.suffix !== null ? letters.current[item.suffix].letter : ''}`,}}
+                  dangerouslySetInnerHTML={{__html:
+                 `${item.prefix !== null ? letters.current[item.prefix].letter : ''}
+                  ${letters.current[item.letter].letter}
+                  ${item.suffix !== null ? letters.current[item.suffix].letter : ''}`,}}
               />
             )))}
           </div>

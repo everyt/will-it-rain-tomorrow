@@ -1,7 +1,7 @@
-import DialogView from 'wirt@/components/dialog/DialogView';
+import DialogueInput from 'wirt@/components/dialogue/DialogueInput';
 
 import prologue from 'wirt@/string/prologue.json';
 
 export default function page() {
-  return <DialogView json={prologue} />;
+  return <DialogueInput json={prologue} />;
 }

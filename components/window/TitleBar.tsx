@@ -1,13 +1,11 @@
 'use client';
 
 import { Icon } from '@iconify-icon/react';
-import { appWindow } from '@tauri-apps/api/window';
-import { on } from 'events';
-import { AnimationControls, motion, useAnimation } from 'framer-motion';
-
 import { useEffect, useState } from 'react';
-
 import { usePathname } from 'next/navigation';
+import { appWindow } from '@tauri-apps/api/window';
+import { AnimationControls, motion, useAnimation } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function TitleBar() {
   const [isMaximized, setIsMaximized] = useState(false);
@@ -15,6 +13,7 @@ export default function TitleBar() {
 
   const [onHoverWrapper, setOnHoverWrapper] = useState(false);
 
+  const [onHoverMainmenu, setOnHoverMainmenu] = useState(false);
   const [onHoverMinimize, setOnHoverMinimize] = useState(false);
   const [onHoverMaximize, setOnHoverMaximize] = useState(false);
   const [onHoverFullscreen, setOnHoverFullscreen] = useState(false);
@@ -22,6 +21,7 @@ export default function TitleBar() {
 
   const controlWrapper = useAnimation();
 
+  const controlMainmenu = useAnimation();
   const controlMinimize = useAnimation();
   const controlMaximize = useAnimation();
   const controlFullscreen = useAnimation();
@@ -31,9 +31,12 @@ export default function TitleBar() {
 
   const handleOnHoverWrapper = (isOnHover: boolean) => {
     if (!isOnHover) {
+      setOnHoverMainmenu(false);
       setOnHoverMinimize(false);
       setOnHoverMaximize(false);
+      setOnHoverFullscreen(false);
       setOnHoverClose(false);
+      controlMainmenu.start({ opacity: 0.3 });
       controlMinimize.start({ opacity: 0.3 });
       controlMaximize.start({ opacity: 0.3 });
       controlFullscreen.start({ opacity: 0.3 });
@@ -53,6 +56,11 @@ export default function TitleBar() {
     }
     setOnHover(isOnHover);
   };
+  const router = useRouter();
+  const mainmenu = () => {
+    router.push('/');
+    handleOnHoverButton(controlMainmenu, setOnHoverMainmenu, false);
+  }
   const minimize = async () => {
     await appWindow.setResizable(true);
     await appWindow.minimize();
@@ -96,6 +104,7 @@ export default function TitleBar() {
       onMouseOut={() => handleOnHoverWrapper(false)}
     >
       {[
+        [controlMainmenu, mainmenu, 'back', onHoverMainmenu, setOnHoverMainmenu],
         [controlFullscreen, fullscreen, 'fullscreen-2', onHoverFullscreen, setOnHoverFullscreen],
         [controlMinimize, minimize, 'minimize', onHoverMinimize, setOnHoverMinimize],
         [controlMaximize, maximize, 'fullscreen', onHoverMaximize, setOnHoverMaximize],
