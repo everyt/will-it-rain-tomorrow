@@ -40,7 +40,7 @@ export default function DialogueInput({ json }: { json: Object }) {
 
     return [titles, backgrounds, names, dialogues];
   };
-
+  const [isMounted, setIsMounted] = useState(false);
   const [titles, backgrounds, names, dialogues] = extractNameAndDialogue(JSON.stringify(json));
   const [flow, setFlow] = useState('next');
   const [index, setIndex] = useState(0);
@@ -52,17 +52,18 @@ export default function DialogueInput({ json }: { json: Object }) {
   useEffect(() => {
     const isNext = () => {
       if (flow === 'next') {
-        if ((backgrounds[index] === 'undefined'
-           ||     titles[index] === 'undefined'
-           ||      names[index] === 'undefined') && index === 0) setIndex((prev) => prev + 1);
-        if (   dialogues[index] ===  undefined   && index !== 0) router.push('/');
+        if (  dialogues[index] ===  undefined  && index !== 0) router.push('/');
         if (backgrounds[index] !== 'undefined') background.current = backgrounds[index]
-        if (  dialogues[index] !== 'undefined') dialogue.current = dialogues[index]
         if (     titles[index] !== 'undefined') title.current = titles[index]
         if (      names[index] !== 'undefined') name.current = names[index];
+        if        (dialogues[index] === 'undefined' && index === 0) {
+          dialogue.current = dialogues[index+1]
+        } else if (dialogues[index] !== 'undefined' && index !== 0) {
+          dialogue.current = dialogues[index]
+        }
         setIndex((prev) => prev + 1);
       }
-    };
+    }
     isNext();
   }, [flow]);
 
