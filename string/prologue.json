@@ -2,7 +2,7 @@
   {
     "name": "null",
     "title": "null",
-    "effect": "className={'h-screen w-screen absolute left-0 top-0 bg-black'} initial={{ opacity: 1 }} animate={{ opacity: 0 }}",
+    "effect": "timer={2000} className={'h-screen w-screen absolute left-0 top-0 bg-black'} initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 1, ease: 'easeInOut' }}",
     "background": "/backgrounds/nostalgia.jpg"
   },
   {"dialogue": "여름이었다."},
