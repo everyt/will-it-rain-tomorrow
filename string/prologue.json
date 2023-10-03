@@ -1,5 +1,10 @@
 [
-  {"title": "null", "background": "/backgrounds/nostalgia.jpg", "name": "null"},
+  {
+    "name": "null",
+    "title": "null",
+    "effect": "className={'h-screen w-screen absolute left-0 top-0 bg-black'} initial={{ opacity: 1 }} animate={{ opacity: 0 }}",
+    "background": "/backgrounds/nostalgia.jpg"
+  },
   {"dialogue": "여름이었다."},
   {"dialogue": "그래, 여름이라는 계절은, 무척이나 따스하고도 온화하면서도. 무덥고 습한 생명이 고동치는 계절이다. 매미가 울고, 새들이 지저귀고, 개구리가 뛰어다니는."},
   {"dialogue": "그리고 지금 나는 여기. 순백의 방 안에서 그 여름을 지켜보고 있다."},
