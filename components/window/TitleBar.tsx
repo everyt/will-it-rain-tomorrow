@@ -114,7 +114,7 @@ export default function TitleBar() {
           key={index}
           initial={{ opacity: 0.3 }}
           animate={controls as AnimationControls}
-          className='ml-2 h-[24px] w-[24px] cursor-pointer'
+          className='ml-2 h-[24px] w-[24px]'
         >
           <Icon
             className={pathname === '/story' ? 'text-white' : 'text-black'}

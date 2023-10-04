@@ -34,11 +34,11 @@ export default function DialogueDisplay({ flow, setFlow, children, name, title, 
       setFlow('start');
     }
     if (flow === 'end') {
+      setFlow('next');
       setTypingCount(0);
       letters.current = [];
       lettersMap.current = [];
       setLettersMapState([]);
-      setFlow('next');
     }
   }, [flow]);
   useInterval(
@@ -53,14 +53,15 @@ export default function DialogueDisplay({ flow, setFlow, children, name, title, 
   );
 // 타이핑 시스템 ────────────────────────────────────────────────────────────────
   const typing = () => {
-    const initializeDialog = () => {
+    const initializeDialog = () => { // 새 대화를 위한 초기화
       if (children) {
-        let tempLetters = children.split('');
+        let tempLetters = children.split(''); // children 분해
         let letter = '';
-        for (let i = 0; i < tempLetters.length; i++) {
+        for (let i = 0; i < tempLetters.length; i++) { // 반복문
           letter = tempLetters[i];
           let type = 'text';
-          if (letter === '<') {
+          if (letter === ' ') letter = '&nbsp;';
+          if (letter === '<') { // 태그 처리 시작
             i++;
             type = tempLetters[i] === '/' ? 'closingTag' : 'startingTag';
             while (tempLetters[i] !== '>') {
@@ -69,26 +70,23 @@ export default function DialogueDisplay({ flow, setFlow, children, name, title, 
             }
             letter += tempLetters[i];
           }
-          if (letter === ' ') letter = '&nbsp;';
           letters.current.push({letter, type});
         }
-        for (let i= 0; i < letters.current.length; i++) {
-          if (letters.current[i].type === 'effect') {
-            lettersMap.current.push({prefix: 0, suffix: null, letter: 1})
-          } else if (letters.current[i].type === 'text') {
-            lettersMap.current.push({prefix: null, suffix: null, letter: i})
-          } else if (letters.current[i].type === 'startingTag') {
+        for (let i= 0; i < letters.current.length; i++) { // 처리한 children들을 반복문으로 재처리
+          if (letters.current[i].type === 'text') {
+            lettersMap.current.push({prefix: null, suffix: null, letter: i}) // lettersMap은 letters의 index를 기록함
+          } else if (letters.current[i].type === 'startingTag') { // 태그 처리 시작
             let j = 0;
-            let k = i;
-            while (letters.current[i].type !== 'closingTag') {
-              i++;
-              j++;
+            let k = i; // i의 초기값을 기록함
+            while (letters.current[i].type !== 'closingTag') { // for문 안 while문으로 태그를 처리함. closingTag가 참일때까지 반복
+              i++; // 도달한 i는 closingTag의 index
+              j++; // j는 태그 안의 글자 수
             }
             const tempLettersMap: lettersMap[] = [];
-            for (j; j > 1; j--) {
+            for (j; j > k; j--) {
               tempLettersMap.push({prefix: k, suffix: i, letter: j + k - 1})
             }
-            lettersMap.current.push(...tempLettersMap.reverse());
+            lettersMap.current.push(...tempLettersMap.reverse()); // 역순으로 반복문을 돌렸으니까 reverse 구조분해
           }
         }
         setLettersMapState(lettersMap.current);
@@ -147,14 +145,13 @@ export default function DialogueDisplay({ flow, setFlow, children, name, title, 
         className='h-1/3 w-full m-5
         absolute bottom-[-20px] left-[-20px] z-20
         bg-black text-white'
-        onClick={() => flow === 'typing' ? setFlow('skip') : setFlow('end')}
       >
-        {name !== 'null' && <div className='text-[3.5vh] m-4'>{name}</div>}
+        {name !== 'null' && <div className='text-[4.5vh] m-4'>{name}</div>}
         <div className='m-2'>
           <div
             className='w-[98%] m-4
             flex flex-wrap content-center
-            text-[2.8vh]'
+            text-[3.5vh]'
           >
             {lettersMapState.map((item, index) => (index < typingCount-1 && (
                 <div key={index}

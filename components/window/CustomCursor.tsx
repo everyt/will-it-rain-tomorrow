@@ -29,11 +29,13 @@ export default function CustomCursor() {
 
 
   return (
+    <>
     <motion.img
       className='h-[2em] w-[2em] fixed z-[9999] pointer-events-none'
       src='/cursor.png'
       variants={cursorVariants}
       animate='default'
     />
+    </>
   )
 }
