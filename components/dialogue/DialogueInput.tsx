@@ -68,7 +68,6 @@ export default function DialogueInput({ json }: { json: Object[] }) {
   const dialogue = useRef<string>('');
   const background = useRef<string>('');
   let timeOfTheEnd = false;
-  let swapPage = false;
 
   useEffect(() => {
     const isNext = async() => {
@@ -93,7 +92,6 @@ export default function DialogueInput({ json }: { json: Object[] }) {
             await setTimeout(function() { router.push('/') }, 800);
           } else {
             fadeController.start({ opacity: 1, transition: { ease: 'easeIn' }});
-            swapPage = true;
             await setIndex(0);
             await setDocCount((prev) => prev + 1);
             await setTimeout(function() { fadeController.start({ opacity: 0, transition: { ease: 'easeOut' }}) }, 800);
