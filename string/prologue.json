@@ -4,8 +4,10 @@
     "title": "null",
     "background": "/backgrounds/Halte.png"
   },
-  { "dialogue": "비가 오는 날, 인적이 드문 거리에서는 뭐랄까, 이따금씩 묘한 향기가 난다." },
   {
-    "dialogue": "코 끝에 닿아 맴도는 산뜻하고도, 무척이나 그리운 냄새. 그건, 도시에 살고 있는 사람들이라면 누구나 그리워 할 법한 것이다."
+    "dialogue": "비가 오는 날, 인적이 드문 거리에서는 뭐랄까, 이따금씩 <p style='font-size: 100px;'>묘한</p> <p style='color: yellow;'>향기</p>가 난다."
+  },
+  {
+    "dialogue": "코 끝에 닿아 맴도는 산뜻하고도, 언젠가는 한번쯤 마주했던 것. 그건, 도시에 살고 있는 사람들이라면 누구나 그리워 할 그런 무언가의 <p style='color: yellow;'>향기</p>였다."
   }
 ]

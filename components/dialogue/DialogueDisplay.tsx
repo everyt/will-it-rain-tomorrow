@@ -78,12 +78,12 @@ export default function DialogueDisplay({ flow, setFlow, children, name, title, 
           } else if (letters.current[i].type === 'startingTag') { // 태그 처리 시작
             let j = 0;
             let k = i; // i의 초기값을 기록함
-            while (letters.current[i].type !== 'closingTag') { // for문 안 while문으로 태그를 처리함. closingTag가 참일때까지 반복
-              i++; // 도달한 i는 closingTag의 index
-              j++; // j는 태그 안의 글자 수
+            while (letters.current[i].type !== 'closingTag') {
+              i++;
+              j++;
             }
             const tempLettersMap: lettersMap[] = [];
-            for (j; j > k; j--) {
+            for (j; j > 1; j--) {
               tempLettersMap.push({prefix: k, suffix: i, letter: j + k - 1})
             }
             lettersMap.current.push(...tempLettersMap.reverse()); // 역순으로 반복문을 돌렸으니까 reverse 구조분해
@@ -155,19 +155,19 @@ export default function DialogueDisplay({ flow, setFlow, children, name, title, 
           >
             {lettersMapState.map((item, index) => (index < typingCount-1 && (
                 <div key={index}
-                  dangerouslySetInnerHTML={{__html:
-                 `${item.prefix !== null ? letters.current[item.prefix].letter : ''}
-                  ${letters.current[item.letter].letter}
-                  ${item.suffix !== null ? letters.current[item.suffix].letter : ''}`,}}
+                  dangerouslySetInnerHTML={{__html:`${
+                    item.prefix !== null ? letters.current[item.prefix].letter : ''}${
+                      letters.current[item.letter].letter}${
+                        item.suffix !== null ? letters.current[item.suffix].letter : ''}`,}}
               />
             )))}
             {lettersMapState.map((item, index) => (index === typingCount-1 && (
                 <div key={index}
                   className='animate-fadeIn'
-                  dangerouslySetInnerHTML={{__html:
-                 `${item.prefix !== null ? letters.current[item.prefix].letter : ''}
-                  ${letters.current[item.letter].letter}
-                  ${item.suffix !== null ? letters.current[item.suffix].letter : ''}`,}}
+                  dangerouslySetInnerHTML={{__html:`${
+                    item.prefix !== null ? letters.current[item.prefix].letter : ''}${
+                    letters.current[item.letter].letter}${
+                    item.suffix !== null ? letters.current[item.suffix].letter : ''}`,}}
               />
             )))}
           </div>

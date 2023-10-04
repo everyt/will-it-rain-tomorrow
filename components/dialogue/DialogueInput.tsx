@@ -74,8 +74,8 @@ export default function DialogueInput({ json }: { json: Object[] }) {
       if (flow === 'next' && timeOfTheEnd === false) {
         const insertDocData = () => {
           if (docList[docCount].backgrounds[index] !== null && docList[docCount].backgrounds[index] !== undefined) background.current = docList[docCount].backgrounds[index]!;
-          if (docList[docCount].titles[index] !== null &&      docList[docCount].titles[index] !== undefined)      title.current = docList[docCount].titles[index]!;
-          if (docList[docCount].names[index] !== null &&       docList[docCount].names[index] !== undefined)       name.current = docList[docCount].names[index]!;
+          if (docList[docCount].titles[index] !== null && docList[docCount].titles[index] !== undefined) title.current = docList[docCount].titles[index]!;
+          if (docList[docCount].names[index] !== null && docList[docCount].names[index] !== undefined) name.current = docList[docCount].names[index]!;
           if (docList[docCount].dialogues[index] === null && index === 0) {
             if (docList[docCount].dialogues[index+1] !== undefined && docList[docCount].dialogues[index+1] !== null) {
               dialogue.current = docList[docCount].dialogues[index+1]!;

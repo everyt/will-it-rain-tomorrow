@@ -50,6 +50,9 @@ dependencies:
   typescript:
     specifier: 5.2.2
     version: 5.2.2
+  yaml:
+    specifier: ^2.3.2
+    version: 2.3.2
 
 devDependencies:
   '@tauri-apps/cli':
