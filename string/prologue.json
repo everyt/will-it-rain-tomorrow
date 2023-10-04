@@ -2,12 +2,10 @@
   {
     "name": "null",
     "title": "null",
-    "effect": "timer={2000} className={'h-screen w-screen absolute left-0 top-0 bg-black'} initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 1, ease: 'easeInOut' }}",
     "background": "/backgrounds/nostalgia.jpg"
   },
-  {"dialogue": "여름이었다."},
-  {"dialogue": "그래, 여름이라는 계절은, 무척이나 따스하고도 온화하면서도. 무덥고 습한 생명이 고동치는 계절이다. 매미가 울고, 새들이 지저귀고, 개구리가 뛰어다니는."},
-  {"dialogue": "그리고 지금 나는 여기. 순백의 방 안에서 그 여름을 지켜보고 있다."},
-  {"dialogue": "때는, 지금보다 빠른 겨우 2개월 전의 일이었다."},
-  {"dialogue": "6 Fusce non enim eu elit viverra ullamcorper a iaculis purus. Nunc eu velit vel erat rutrum dapibus et ut purus. Donec molestie suscipit risus ut efficitur."}
+  { "dialogue": "비가 오는 날, 인적이 드문 거리에서는 뭐랄까, 이따금씩 묘한 향기가 난다." },
+  {
+    "dialogue": "코 끝에 닿아 맴도는 산뜻하고도, 무척이나 그리운 냄새. 그건, 도시에 살고 있는 사람들이라면 누구나 그리워 할 법한 것이다."
+  }
 ]

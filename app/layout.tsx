@@ -1,7 +1,7 @@
 import 'wirt@/public/styles.css';
 import Frame from 'wirt@/components/window/Frame';
-import localFont from 'next/font/local'
-const NanumSquareNeo = localFont({ src: '../public/fonts/NanumSquareNeo-Variable.woff2', display: 'swap', weight:'300' })
+import localFont from 'next/font/local';
+const NanumSquareNeo = localFont({ src: '../public/fonts/NanumSquareNeo-Variable.woff2', display: 'swap', weight:'300' });
 
 export default function RootLayout({
   children,
